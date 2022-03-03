@@ -6,7 +6,7 @@ export interface Character {
   birthday: string;
   occupation: string[];
   img: string;
-  status: 'Alive' | 'Deceased';
+  status: 'Alive' | 'Deceased' | 'Presumed dead';
   appearance: number[];
   portrayed: string;
   category: string;
