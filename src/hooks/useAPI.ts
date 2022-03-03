@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { Dispatch, useReducer, useEffect } from 'react';
-import { apiBaseUrl } from '../config/app';
+import axios from "axios";
+import { Dispatch, useReducer, useEffect } from "react";
+import { apiBaseUrl } from "../config/app";
 // models
-import { apiOptsInterface } from '../models/Api/apiOptsInterface';
-import { apiStatusInterface } from '../models/Api/apiStatusInterface';
+import { apiOptsInterface } from "../models/Api/apiOptsInterface";
+import { apiStatusInterface } from "../models/Api/apiStatusInterface";
 
 const initialDefaultOpts: apiOptsInterface = {
   wait: false,
@@ -20,17 +20,17 @@ const apiOptsReducer = (state: apiOptsInterface, action) => ({
 const apiStatusReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
-    case 'fetch-init':
+    case "fetch-init":
       return {
         isLoading: true,
       };
-    case 'fetch-end':
+    case "fetch-end":
       return {
         isLoading: false,
         data: payload.data,
         status: payload.status,
       };
-    case 'fetch-error':
+    case "fetch-error":
       return {
         isLoading: false,
         error: payload.error,
@@ -43,10 +43,7 @@ const apiStatusReducer = (state, action) => {
 export function useAPI<T>(
   initialOpts: apiOptsInterface,
   onSuccess?: (data: T, status: number, apiOpts: apiOptsInterface) => void,
-  onError?: (
-    error: Record<string, unknown>,
-    apiOpts: apiOptsInterface
-  ) => void,
+  onError?: (error: Record<string, unknown>, apiOpts: apiOptsInterface) => void
 ): {
   apiStatus: apiStatusInterface<T>;
   dispatchAPIOpts: Dispatch<apiOptsInterface>;
@@ -68,16 +65,19 @@ export function useAPI<T>(
 
     const handleRequest = async () => {
       try {
-        dispatchAPIStatus({ type: 'fetch-init' });
+        dispatchAPIStatus({ type: "fetch-init" });
 
         const response = await axios(`${apiBaseUrl}${apiOpts.url}`);
 
-        dispatchAPIStatus({ type: 'fetch-end', payload: { data: response.data, status: response.status } });
+        dispatchAPIStatus({
+          type: "fetch-end",
+          payload: { data: response.data, status: response.status },
+        });
 
         onSuccess && onSuccess(response.data, response.status, apiOpts);
       } catch (error) {
         dispatchAPIStatus({
-          type: 'fetch-error',
+          type: "fetch-error",
           payload: { error },
         });
 

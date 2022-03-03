@@ -1,8 +1,6 @@
-import React, { FC } from 'react';
-import {
-  AppBar, IconButton, Toolbar, Typography,
-} from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import React, { FC } from "react";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const AppHeader: FC = () => {
   const { t } = useTranslation();
@@ -18,7 +16,7 @@ const AppHeader: FC = () => {
           sx={{ mr: 2 }}
         />
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {t('app.title')}
+          {t("app.title")}
         </Typography>
       </Toolbar>
     </AppBar>

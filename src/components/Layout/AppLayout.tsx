@@ -1,12 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 
-const AppLayout: FC = () => {
-
-  return (
-    <div>
-
-    </div>
-  );
-};
+const AppLayout: FC = () => <div />;
 
 export default AppLayout;
