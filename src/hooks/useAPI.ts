@@ -90,7 +90,7 @@ export function useAPI<T>(
     return () => {
       canceled = true;
     };
-  }, [apiOpts, onError, onSuccess]);
+  }, [apiOpts]);
 
   return { apiStatus, dispatchAPIOpts };
 }

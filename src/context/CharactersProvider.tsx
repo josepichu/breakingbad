@@ -1,10 +1,17 @@
 import React, { FC } from "react";
 import { useAPI } from "../hooks/useAPI";
+import { apiOptsInterface } from "../models/Api/apiOptsInterface";
 import { apiStatusInterface } from "../models/Api/apiStatusInterface";
 import { Character } from "../models/Character";
+import { Array } from "../utils";
 
 export interface CharactersStateInterface {
   apiStatus: apiStatusInterface<Character[]>;
+  fetchCharacters: React.Dispatch<apiOptsInterface>;
+  filterData(e): void;
+  searchCharacterValue: string;
+  filteredData: Character[];
+  hasFilteredData: boolean;
 }
 
 export const invoicesInitialState: CharactersStateInterface = {
@@ -12,6 +19,11 @@ export const invoicesInitialState: CharactersStateInterface = {
     data: [],
     isLoading: false,
   },
+  searchCharacterValue: "",
+  filteredData: [],
+  hasFilteredData: false,
+  fetchCharacters: () => null,
+  filterData: () => null,
 };
 
 export const CharactersContext =
@@ -34,6 +46,17 @@ const reducer = (
           isLoading: false,
         },
       };
+    case "characters-filtered": {
+      const {
+        payload: { searchCharacterValue },
+      } = action;
+      return {
+        ...state,
+        filteredData: data,
+        searchCharacterValue,
+        hasFilteredData: data.length > 0,
+      };
+    }
     default:
       return state;
   }
@@ -49,15 +72,53 @@ export const useCharacters = () => {
 };
 
 export const CharactersProviders: FC = ({ children }) => {
-  const [state] = React.useReducer(reducer, invoicesInitialState);
+  const [state, dispatch] = React.useReducer(reducer, invoicesInitialState);
 
-  const { apiStatus } = useAPI<Character[]>({ url: "characters" });
+  /**
+   * data is shuffled and saved within context
+   */
+  const onFetchedCharacters = (data: Character[]) => {
+    dispatch({
+      type: "characters-fulfilled",
+      payload: { data: Array.shuffleArray(data) },
+    });
+  };
+
+  /**
+   * useAPI initialization for characters
+   */
+  const { apiStatus, dispatchAPIOpts: fetchCharacters } = useAPI<Character[]>(
+    { url: "characters", wait: true },
+    onFetchedCharacters
+  );
+
+  /**
+   * fetch characters on init
+   */
+  React.useEffect(() => {
+    fetchCharacters({ url: "characters" });
+  }, []);
+
+  const filterData = (value: string) => {
+    const filteredCharacters = state.apiStatus.data.filter(
+      (character: Character) =>
+        character.name.includes(value) ||
+        character.nickname.includes(value) ||
+        character.portrayed.includes(value)
+    );
+    dispatch({
+      type: "characters-filtered",
+      payload: { data: filteredCharacters, searchCharacterValue: value },
+    });
+  };
 
   return (
     <CharactersContext.Provider
       value={{
         ...state,
         apiStatus,
+        fetchCharacters,
+        filterData,
       }}
     >
       {children}
