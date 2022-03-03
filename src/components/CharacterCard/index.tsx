@@ -13,12 +13,11 @@ interface Props {
 }
 
 const CharacterCard: FC<Props> = ({ data }) => (
-  <Card sx={{ width: 120 }}>
+  <Card sx={{ width: 250 }}>
     <CardMedia
       component="img"
       height="140"
       image={data.img}
-      alt="green iguana"
     />
     <CardContent>
       <Typography gutterBottom variant="h5" component="div">

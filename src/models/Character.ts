@@ -1,5 +1,6 @@
 export interface Character {
-  id: number;
+  // eslint-disable-next-line camelcase
+  char_id: number;
   name: string;
   nickname: string;
   birthday: string;

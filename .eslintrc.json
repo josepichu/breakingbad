@@ -41,6 +41,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "import/prefer-default-export": "off",
     "react/prop-types": "off",
+    "react/require-default-props": "off" ,
     // https://eslint.org/docs/rules/no-unused-expressions
     "no-unused-expressions": [
       "warn",
