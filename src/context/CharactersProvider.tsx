@@ -99,12 +99,16 @@ export const CharactersProviders: FC = ({ children }) => {
     fetchCharacters({ url: "characters" });
   }, []);
 
+  /**
+   * filter character data by name, nickname or portrayed
+   */
   const filterData = (value: string) => {
+    const valueToSearch = value.toLowerCase();
     const filteredCharacters = state.apiStatus.data.filter(
       (character: Character) =>
-        character.name.includes(value) ||
-        character.nickname.includes(value) ||
-        character.portrayed.includes(value)
+        character.name.toLowerCase().includes(valueToSearch) ||
+        character.nickname.toLowerCase().includes(valueToSearch) ||
+        character.portrayed.toLowerCase().includes(valueToSearch)
     );
     dispatch({
       type: "characters-filtered",

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import { Box, TextField } from "@mui/material";
+import { Box, InputAdornment, TextField } from "@mui/material";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 
 import { Character } from "../../models/Character";
 import Page from "../../components/Layout/Page";
@@ -33,12 +34,21 @@ const CharacterList: FC = () => {
   return (
     <Page>
       <TextField
-        label="Buscar"
-        variant="filled"
+        label="Buscar personaje"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PersonSearchIcon />
+            </InputAdornment>
+          ),
+        }}
+        variant="standard"
         value={searchCharacterValue}
         onChange={(e) => filterData(e.target.value)}
       />
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>{characterList}</Box>
+      <Box sx={{ display: "flex", flexWrap: "wrap", marginTop: 1 }}>
+        {characterList}
+      </Box>
     </Page>
   );
 };

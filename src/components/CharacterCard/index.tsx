@@ -4,17 +4,19 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+// import Typography from "@mui/material/Typography";
 
 import { CardHeader } from "@mui/material";
 import { Character } from "../../models/Character";
+
+import "./styles.css";
 
 interface Props {
   data: Character;
 }
 
 const CharacterCard: FC<Props> = ({ data }) => (
-  <Card sx={{ width: 250 }}>
+  <Card sx={{ width: 250 }} className="character-card">
     <CardHeader
       avatar={() => <div />}
       title={`${data.name} (${data.nickname})`}
@@ -25,9 +27,9 @@ const CharacterCard: FC<Props> = ({ data }) => (
       {/* <Typography gutterBottom variant="h5" component="div">
         {data.name}
       </Typography> */}
-      <Typography variant="body2" color="text.secondary">
+      {/* <Typography variant="body2" color="text.secondary">
         {data.nickname}
-      </Typography>
+      </Typography> */}
     </CardContent>
     <CardActions>
       <Button size="small">Share</Button>

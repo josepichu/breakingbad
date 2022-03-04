@@ -22,6 +22,7 @@ const apiStatusReducer = (state, action) => {
   switch (type) {
     case "fetch-init":
       return {
+        data: [],
         isLoading: true,
       };
     case "fetch-end":
@@ -32,6 +33,7 @@ const apiStatusReducer = (state, action) => {
       };
     case "fetch-error":
       return {
+        ...state,
         isLoading: false,
         error: payload.error,
       };

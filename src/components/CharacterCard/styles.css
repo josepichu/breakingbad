@@ -1,0 +1,8 @@
+.character-card {
+  transition: transform 250ms;
+}
+
+.character-card:hover {
+  cursor: pointer;
+  transform: translateY(-10px);
+}
