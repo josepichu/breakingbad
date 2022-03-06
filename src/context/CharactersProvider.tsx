@@ -10,9 +10,13 @@ export interface CharactersStateInterface {
   apiStatus: apiStatusInterface<Character[]>;
   fetchCharacters: React.Dispatch<apiOptsInterface>;
   filterData(e): void;
+  setSelectedCharacter(character?: Character): void;
   searchCharacterValue: string;
   filteredData: Character[];
   hasFilteredData: boolean;
+  selectedCharacter?: Character;
+  getNextCharacter(): Character | undefined;
+  getPrevCharacter(): Character | undefined;
 }
 
 export const invoicesInitialState: CharactersStateInterface = {
@@ -25,6 +29,9 @@ export const invoicesInitialState: CharactersStateInterface = {
   hasFilteredData: false,
   fetchCharacters: () => null,
   filterData: () => null,
+  setSelectedCharacter: () => null,
+  getNextCharacter: () => undefined,
+  getPrevCharacter: () => undefined,
 };
 
 export const CharactersContext =
@@ -78,6 +85,15 @@ const reducer = (
         filteredData: data,
         searchCharacterValue,
         hasFilteredData: data.length > 0,
+      };
+    }
+    case "set-selected-character": {
+      const {
+        payload: { data },
+      } = action;
+      return {
+        ...state,
+        selectedCharacter: data,
       };
     }
     default:
@@ -137,6 +153,9 @@ export const CharactersProviders: FC = ({ children }) => {
       });
   }, [charErros, quotesErros]);
 
+  /**
+   * intergate quotes data within characters model
+   */
   React.useEffect(() => {
     if (!isLoadingCharacters && !isLoadingQuotes) {
       const data = characters.map((character: Character) => ({
@@ -169,12 +188,47 @@ export const CharactersProviders: FC = ({ children }) => {
     });
   };
 
+  const setSelectedCharacter = (character?: Character) =>
+    dispatch({
+      type: "set-selected-character",
+      payload: { data: character },
+    });
+
+  const getNextCharacter = (): Character | undefined => {
+    const displayedData = state.searchCharacterValue
+      ? state.filteredData
+      : state.apiStatus.data;
+
+    const currentIndex = displayedData.findIndex(
+      (character: Character) =>
+        character.char_id === state.selectedCharacter?.char_id
+    );
+
+    return displayedData[currentIndex + 1];
+  };
+
+  const getPrevCharacter = (): Character | undefined => {
+    const displayedData = state.searchCharacterValue
+      ? state.filteredData
+      : state.apiStatus.data;
+
+    const currentIndex = displayedData.findIndex(
+      (character: Character) =>
+        character.char_id === state.selectedCharacter?.char_id
+    );
+
+    return displayedData[currentIndex - 1];
+  };
+
   return (
     <CharactersContext.Provider
       value={{
         ...state,
         fetchCharacters,
         filterData,
+        setSelectedCharacter,
+        getNextCharacter,
+        getPrevCharacter,
       }}
     >
       {children}
