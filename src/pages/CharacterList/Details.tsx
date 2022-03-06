@@ -79,6 +79,10 @@ const CharacterDetails: FC = () => {
                 src={selectedCharacter.img}
                 alt={selectedCharacter.name}
                 width={400}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                }}
               />
             </Grid>
             <Grid
@@ -89,6 +93,10 @@ const CharacterDetails: FC = () => {
                 marginTop: {
                   xs: 2,
                   md: 0,
+                },
+                paddingLeft: {
+                  xs: 0,
+                  sm: 3,
                 },
               }}
             >

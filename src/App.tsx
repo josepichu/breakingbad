@@ -3,8 +3,8 @@ import { Container } from "@mui/material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import AppHeader from "./components/Layout/AppHeader";
-import CharacterList from "./pages/CharacterList";
-import CharacterDetails from "./pages/CharacterList/Details";
+import { Route as AppRoute } from "./models/App/Route";
+import { routes } from "./config/routes";
 
 import "./assets/css/App.css";
 
@@ -14,8 +14,13 @@ const App: FC = () => (
     <Container maxWidth="lg" className="app-body">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<CharacterList />} />
-          <Route path="/details" element={<CharacterDetails />} />
+          {routes.map((route: AppRoute) => (
+            <Route
+              key={route.key}
+              path={route.path}
+              element={route.component()}
+            />
+          ))}
         </Routes>
       </BrowserRouter>
     </Container>

@@ -20,7 +20,7 @@ const CharacterCard: FC<Props> = ({ data }) => {
 
   const handleCardClick = () => {
     setSelectedCharacter(data);
-    navigate("/details");
+    navigate("/character-details");
   };
 
   return (
