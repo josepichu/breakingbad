@@ -7,12 +7,15 @@ import "./i18n";
 
 import reportWebVitals from "./reportWebVitals";
 import { CharactersProviders } from "./context/CharactersProvider";
+import { BackdropProvider } from "./context/BackdropProvider";
 
 ReactDOM.render(
   <React.StrictMode>
-    <CharactersProviders>
-      <App />
-    </CharactersProviders>
+    <BackdropProvider>
+      <CharactersProviders>
+        <App />
+      </CharactersProviders>
+    </BackdropProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

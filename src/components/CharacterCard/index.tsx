@@ -30,7 +30,7 @@ const CharacterCard: FC<Props> = ({ data }) => {
       onClick={handleCardClick}
     >
       <CardHeader
-        avatar={() => <div />}
+        avatar={<div />}
         title={`${data.name} (${data.nickname})`}
         subheader={data.portrayed}
       />

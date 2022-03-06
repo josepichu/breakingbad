@@ -24,6 +24,8 @@ const CharacterDetails: FC = () => {
     getPrevCharacter,
   } = useCharacters();
 
+  if (!selectedCharacter) navigate("/");
+
   return (
     <Page className="character-details">
       {!!selectedCharacter && (
@@ -32,6 +34,12 @@ const CharacterDetails: FC = () => {
             display="flex"
             alignItems="center"
             justifyContent="space-between"
+            sx={{
+              flexDirection: {
+                xs: "column",
+                md: "row",
+              },
+            }}
           >
             <Button
               variant="text"
@@ -70,7 +78,17 @@ const CharacterDetails: FC = () => {
                 width={400}
               />
             </Grid>
-            <Grid item md={7} sm={12}>
+            <Grid
+              item
+              md={7}
+              sm={12}
+              sx={{
+                marginTop: {
+                  xs: 2,
+                  md: 0,
+                },
+              }}
+            >
               <Box display="flex" alignItems="center">
                 <Typography variant="h4">{selectedCharacter.name}</Typography>
                 <Typography

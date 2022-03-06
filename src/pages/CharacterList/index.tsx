@@ -15,8 +15,6 @@ const CharacterList: FC = () => {
     filterData,
   } = useCharacters();
 
-  console.log(data);
-
   const characterList = React.useMemo(() => {
     const displayedData = searchCharacterValue ? filteredData : data;
 
@@ -47,8 +45,24 @@ const CharacterList: FC = () => {
         variant="standard"
         value={searchCharacterValue}
         onChange={(e) => filterData(e.target.value)}
+        sx={{
+          width: {
+            xs: "100%",
+            md: "300px",
+          },
+        }}
       />
-      <Box sx={{ display: "flex", flexWrap: "wrap", marginTop: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          marginTop: 1,
+          justifyContent: {
+            xs: "center",
+            md: "left",
+          },
+        }}
+      >
         {characterList}
       </Box>
     </Page>

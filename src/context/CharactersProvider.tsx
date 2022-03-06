@@ -5,6 +5,7 @@ import { apiStatusInterface } from "../models/Api/apiStatusInterface";
 import { Character } from "../models/Character";
 import { Quote } from "../models/Quote";
 import { Array } from "../utils";
+import { useBackdrop } from "./BackdropProvider";
 
 export interface CharactersStateInterface {
   apiStatus: apiStatusInterface<Character[]>;
@@ -19,7 +20,7 @@ export interface CharactersStateInterface {
   getPrevCharacter(): Character | undefined;
 }
 
-export const invoicesInitialState: CharactersStateInterface = {
+export const charactersInitialState: CharactersStateInterface = {
   apiStatus: {
     data: [],
     isLoading: false,
@@ -34,16 +35,17 @@ export const invoicesInitialState: CharactersStateInterface = {
   getPrevCharacter: () => undefined,
 };
 
-export const CharactersContext =
-  React.createContext<CharactersStateInterface>(invoicesInitialState);
+export const CharactersContext = React.createContext<CharactersStateInterface>(
+  charactersInitialState
+);
 
 const reducer = (
-  state: CharactersStateInterface = invoicesInitialState,
+  state: CharactersStateInterface = charactersInitialState,
   action
 ): CharactersStateInterface => {
   const { type } = action;
   switch (type) {
-    case "characters-pending":
+    case "characters-pending": {
       return {
         ...state,
         apiStatus: {
@@ -51,6 +53,7 @@ const reducer = (
           isLoading: true,
         },
       };
+    }
     case "characters-fulfilled": {
       const {
         payload: { data },
@@ -111,17 +114,19 @@ export const useCharacters = () => {
 };
 
 export const CharactersProviders: FC = ({ children }) => {
-  const [state, dispatch] = React.useReducer(reducer, invoicesInitialState);
+  const [state, dispatch] = React.useReducer(reducer, charactersInitialState);
+
+  const { setIsLoading } = useBackdrop();
+
+  React.useEffect(() => {
+    setIsLoading(state.apiStatus.isLoading);
+  }, [state.apiStatus.isLoading]);
 
   /**
    * useAPI initialization for characters
    */
   const {
-    apiStatus: {
-      data: characters,
-      error: charErros,
-      isLoading: isLoadingCharacters,
-    },
+    apiStatus: { data: characters, error: charErros },
     dispatchAPIOpts: fetchCharacters,
   } = useAPI<Character[]>({ url: "characters", wait: true });
 
@@ -129,7 +134,7 @@ export const CharactersProviders: FC = ({ children }) => {
    * useAPI initialization for quotes
    */
   const {
-    apiStatus: { data: quotes, error: quotesErros, isLoading: isLoadingQuotes },
+    apiStatus: { data: quotes, error: quotesErros },
     dispatchAPIOpts: fetchQuotes,
   } = useAPI<Quote[]>({ url: "quotes", wait: true });
 
@@ -143,7 +148,7 @@ export const CharactersProviders: FC = ({ children }) => {
   }, []);
 
   /**
-   * catch errors
+   * handle errors
    */
   React.useEffect(() => {
     if (charErros || quotesErros)
@@ -157,7 +162,7 @@ export const CharactersProviders: FC = ({ children }) => {
    * intergate quotes data within characters model
    */
   React.useEffect(() => {
-    if (!isLoadingCharacters && !isLoadingQuotes) {
+    if (characters.length > 0 && quotes.length > 0) {
       const data = characters.map((character: Character) => ({
         ...character,
         quotes: quotes.filter(
@@ -169,7 +174,7 @@ export const CharactersProviders: FC = ({ children }) => {
         payload: { data: Array.shuffleArray(data) },
       });
     }
-  }, [isLoadingQuotes, isLoadingCharacters]);
+  }, [characters, quotes]);
 
   /**
    * filter character data by name, nickname or portrayed
