@@ -14,6 +14,7 @@ This project is a test app using the public API of [breaking bad](https://www.br
 - /context 
   -  CharactersProvider (context containing all characters logic and data access)
   -  BackdropProvider (context to show a loading spinner)
+  -  NotificationProvider (context to add different notifications levels (info, error, warning))
 - /hooks (useApi hook for data fetching)
 - /i18n (folder with locale configuration)
 - /models (folder containing typescript interfaces)
