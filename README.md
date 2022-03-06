@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Breaking Bad testing app for atSistemas
 
 This project is a test app using the public API of [breaking bad](https://www.breakingbadapi.com/) and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
