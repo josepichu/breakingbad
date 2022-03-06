@@ -1,3 +1,6 @@
 {
-    "title": "Breaking Bad"
+    "title": "Breaking Bad",
+    "actions": {
+        "back": "Atrás"
+    }
 }

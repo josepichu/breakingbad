@@ -1,3 +1,4 @@
 import * as Array from "./Array";
+import * as Date from "./Date";
 
-export { Array };
+export { Array, Date };

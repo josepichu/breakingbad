@@ -1,7 +1,11 @@
 import React, { FC } from "react";
 
-const Page: FC = ({ children }) => (
-  <section className="section-container">{children}</section>
+interface Props {
+  className?: string;
+}
+
+const Page: FC<Props> = ({ children, className = "" }) => (
+  <section className={`section-container ${className}`}>{children}</section>
 );
 
 export default Page;

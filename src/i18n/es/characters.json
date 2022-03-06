@@ -1,0 +1,11 @@
+{
+    "back": "Protagonista anterior",
+    "following": "Protagonista siguiente",
+
+    "status": "Estado",
+    "realName": "Nombre real",
+    "age": "Edad",
+    "occupation": "Profesión / Oficio",
+    "seasonsAppearance": "Apariciones en temporada",
+    "unknownAge": "Desconocida"
+}
