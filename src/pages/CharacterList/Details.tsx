@@ -26,6 +26,7 @@ const CharacterDetails: FC = () => {
     birthday,
     occupation,
     appearance,
+    quotes,
   } = state.data;
 
   return (
@@ -77,6 +78,11 @@ const CharacterDetails: FC = () => {
               label={t("characters.seasonsAppearance")}
               value={<SeasonsAppearance seasons={appearance} />}
             />
+            <Typography variant="h6" sx={{ marginTop: 2 }}>
+              {quotes[Math.floor(Math.random() * quotes.length)]?.quote
+                ? `"${quotes[Math.floor(Math.random() * quotes.length)].quote}"`
+                : ""}
+            </Typography>
           </Box>
         </Grid>
       </Grid>

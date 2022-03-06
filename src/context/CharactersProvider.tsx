@@ -3,6 +3,7 @@ import { useAPI } from "../hooks/useAPI";
 import { apiOptsInterface } from "../models/Api/apiOptsInterface";
 import { apiStatusInterface } from "../models/Api/apiStatusInterface";
 import { Character } from "../models/Character";
+import { Quote } from "../models/Quote";
 import { Array } from "../utils";
 
 export interface CharactersStateInterface {
@@ -33,12 +34,20 @@ const reducer = (
   state: CharactersStateInterface = invoicesInitialState,
   action
 ): CharactersStateInterface => {
-  const {
-    type,
-    payload: { data },
-  } = action;
+  const { type } = action;
   switch (type) {
-    case "characters-fulfilled":
+    case "characters-pending":
+      return {
+        ...state,
+        apiStatus: {
+          data: [],
+          isLoading: true,
+        },
+      };
+    case "characters-fulfilled": {
+      const {
+        payload: { data },
+      } = action;
       return {
         ...state,
         apiStatus: {
@@ -46,9 +55,23 @@ const reducer = (
           isLoading: false,
         },
       };
+    }
+    case "characters-erros": {
+      const {
+        payload: { error },
+      } = action;
+      return {
+        ...state,
+        apiStatus: {
+          data: [],
+          isLoading: false,
+          error,
+        },
+      };
+    }
     case "characters-filtered": {
       const {
-        payload: { searchCharacterValue },
+        payload: { data, searchCharacterValue },
       } = action;
       return {
         ...state,
@@ -75,29 +98,59 @@ export const CharactersProviders: FC = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, invoicesInitialState);
 
   /**
-   * data is shuffled and saved within context
-   */
-  const onFetchedCharacters = (data: Character[]) => {
-    dispatch({
-      type: "characters-fulfilled",
-      payload: { data: Array.shuffleArray(data) },
-    });
-  };
-
-  /**
    * useAPI initialization for characters
    */
-  const { apiStatus, dispatchAPIOpts: fetchCharacters } = useAPI<Character[]>(
-    { url: "characters", wait: true },
-    onFetchedCharacters
-  );
+  const {
+    apiStatus: {
+      data: characters,
+      error: charErros,
+      isLoading: isLoadingCharacters,
+    },
+    dispatchAPIOpts: fetchCharacters,
+  } = useAPI<Character[]>({ url: "characters", wait: true });
 
   /**
-   * fetch characters on init
+   * useAPI initialization for quotes
+   */
+  const {
+    apiStatus: { data: quotes, error: quotesErros, isLoading: isLoadingQuotes },
+    dispatchAPIOpts: fetchQuotes,
+  } = useAPI<Quote[]>({ url: "quotes", wait: true });
+
+  /**
+   * fetch characters and quotes on init and then integrated them into single data model
    */
   React.useEffect(() => {
+    dispatch({ type: "characters-pending" });
     fetchCharacters({ url: "characters" });
+    fetchQuotes({ url: "quotes" });
   }, []);
+
+  /**
+   * catch errors
+   */
+  React.useEffect(() => {
+    if (charErros || quotesErros)
+      dispatch({
+        type: "characters-error",
+        payload: { error: `${charErros}, ${quotesErros}` },
+      });
+  }, [charErros, quotesErros]);
+
+  React.useEffect(() => {
+    if (!isLoadingCharacters && !isLoadingQuotes) {
+      const data = characters.map((character: Character) => ({
+        ...character,
+        quotes: quotes.filter(
+          (quote: Quote) => quote.author === character.name
+        ),
+      }));
+      dispatch({
+        type: "characters-fulfilled",
+        payload: { data: Array.shuffleArray(data) },
+      });
+    }
+  }, [isLoadingQuotes, isLoadingCharacters]);
 
   /**
    * filter character data by name, nickname or portrayed
@@ -120,7 +173,6 @@ export const CharactersProviders: FC = ({ children }) => {
     <CharactersContext.Provider
       value={{
         ...state,
-        apiStatus,
         fetchCharacters,
         filterData,
       }}

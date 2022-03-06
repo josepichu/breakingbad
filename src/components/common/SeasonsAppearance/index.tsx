@@ -15,6 +15,7 @@ const SeasonsAppearance: FC<Props> = ({ seasons }) => (
   <Box display="flex" alignItems="center">
     {numberOfSeasonsArray.map((season: number) => (
       <Chip
+        key={season}
         label={season}
         variant={seasons.includes(season) ? "outlined" : "filled"}
         sx={{

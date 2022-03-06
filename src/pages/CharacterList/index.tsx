@@ -15,6 +15,8 @@ const CharacterList: FC = () => {
     filterData,
   } = useCharacters();
 
+  console.log(data);
+
   const characterList = React.useMemo(() => {
     const displayedData = searchCharacterValue ? filteredData : data;
 

@@ -1,3 +1,5 @@
+import { Quote } from "./Quote";
+
 export interface Character {
   // eslint-disable-next-line camelcase
   char_id: number;
@@ -6,8 +8,9 @@ export interface Character {
   birthday: string;
   occupation: string[];
   img: string;
-  status: 'Alive' | 'Deceased' | 'Presumed dead';
+  status: "Alive" | "Deceased" | "Presumed dead";
   appearance: number[];
   portrayed: string;
   category: string;
+  quotes: Quote[];
 }
