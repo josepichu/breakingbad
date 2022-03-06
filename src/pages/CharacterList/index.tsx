@@ -62,6 +62,7 @@ const CharacterList: FC = () => {
             md: "left",
           },
         }}
+        className="characters-list-container"
       >
         {characterList}
       </Box>

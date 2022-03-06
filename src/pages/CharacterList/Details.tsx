@@ -46,6 +46,7 @@ const CharacterDetails: FC = () => {
               startIcon={<ArrowBackIcon />}
               size="small"
               onClick={() => navigate("/")}
+              className="back-btn"
             >
               {t("app.actions.back")}
             </Button>
@@ -56,6 +57,7 @@ const CharacterDetails: FC = () => {
                 size="small"
                 disabled={!getPrevCharacter()}
                 onClick={() => setSelectedCharacter(getPrevCharacter())}
+                className="characters-back-btn"
               >
                 {t("characters.back")}
               </Button>
@@ -65,6 +67,7 @@ const CharacterDetails: FC = () => {
                 size="small"
                 disabled={!getNextCharacter()}
                 onClick={() => setSelectedCharacter(getNextCharacter())}
+                className="characters-following-btn"
               >
                 {t("characters.following")}
               </Button>
